@@ -9,7 +9,8 @@ ENTITY top IS
 		sda: INOUT STD_LOGIC;
 		scl: INOUT STD_LOGIC;
 		data_out: OUT std_logic_vector(7 DOWNTO 0);
-		busy_LED: OUT std_logic
+		busy_LED: OUT std_logic;
+		counter_out: OUT integer range 0 TO 32
 	);
 
 End top;
@@ -18,7 +19,7 @@ ARCHITECTURE logic OF top IS
 	COMPONENT i2c_master 
 	GENERIC(
 		input_clk : INTEGER := 12_000_000; --input clock speed from user logic in Hz
-		bus_clk   : INTEGER := 100_000);   --speed the i2c bus (scl) will run at in Hz
+		bus_clk   : INTEGER := 400_000);   --speed the i2c bus (scl) will run at in Hz
 	PORT(
 		clk       : IN     STD_LOGIC;                    --system clock
 		reset_n   : IN     STD_LOGIC := '0';                    --active low reset
@@ -41,13 +42,13 @@ ARCHITECTURE logic OF top IS
 	SIGNAL data_wr		: std_logic_vector(7 DOWNTO 0);
 	SIGNAL data_rd		: std_logic_vector(7 DOWNTO 0);
 	SIGNAL init_done 	: std_logic := '0';
-	SIGNAL counter		: integer range 0 TO 1_000_000 := 0;
+	SIGNAL counter		: integer range 0 TO 32 := 0;
 	
 Begin
 	I2C_inst : i2c_master
 		generic map (
 			input_clk => 12_000_000,
-			bus_clk   => 100_000
+			bus_clk   => 400_000
 		)
 		port map (
 			clk			=> clk,
@@ -74,7 +75,9 @@ Begin
 			--Initializing Communication
 			--if init_done = '0' then
 				--if busy = '0' then
-					case counter is
+				
+				
+				case counter is
 						when 0 =>
 							ena 	<= '1';
 							rw 		<= '0';
@@ -88,7 +91,7 @@ Begin
 						when 2 =>
 							ena		<= '1';
 							rw 		<= '0';
-							data_wr	<= "01010100"; --Write 0x55
+							data_wr	<= "01010101"; --Write 0x55
 							counter <= counter + 1;
 						when 3 =>
 							ena 	<= '0';
@@ -116,6 +119,118 @@ Begin
 								init_done <= '1'; --Done initializing
 								counter <=  counter + 1;
 							end if;
+				
+					--case counter is
+						--when 0 =>
+							--ena 	<= '1';
+							--rw 		<= '0';
+							--data_wr <= "11110000"; --Write 0xF0
+							--counter <= counter + 1;
+						--when 1 =>
+							--ena <= '0';
+							--if busy = '0' then
+								--ena 	<= '1';
+								--rw 		<= '0';
+								--data_wr <= "01010101"; --Write 0x55
+								--counter <= counter + 1;
+							--end if;
+						--when 2 =>
+							--ena <= '0';
+							--if busy = '0' then
+								--ena		<= '1';
+								--rw 		<= '0';
+								--data_wr	<= "11111011"; --Write 0xFB
+								--counter <= counter + 1;
+							--end if;
+						--when 3 =>
+							--ena <= '0';
+							--if busy = '0' then
+								--ena 	<= '1';
+								--rw 		<= '0';
+								--data_wr <= "00000000"; --Write 0x00
+								--counter <= counter + 1;
+							--end if;
+						
+						
+						
+						
+						
+						
+							--ena 	<= '0';
+							--if busy = '0' then
+								--counter <= counter + 1;
+							--end if;
+						--when 2 =>
+							--ena 	<= '1';
+							--rw 		<= '0';
+							--data_wr <= "01010101"; --Write 0x55
+							--counter <= counter + 1;
+						--when 3 =>
+							--ena 	<= '0';
+							--if busy = '0' then
+								--counter <= counter + 1;
+							--end if;
+						--when 4 =>
+							--ena		<= '1';
+							--rw 		<= '0';
+							--data_wr	<= "11111011"; --Write 0xFB
+							--counter <= counter + 1;
+						--when 5 =>
+							--ena 	<= '0';
+							--if busy = '0' then
+								--counter <= counter + 1;
+							--end if;
+						--when 6 =>
+							--ena 	<= '1';
+							--rw 		<= '0';
+							--data_wr <= "00000000"; --Write 0x00
+							--counter <= counter + 1;
+						--when 7 =>
+							--ena 	<= '0';
+							--if busy = '0' then
+								--counter <= counter + 1;
+							--end if;
+						--when 8 =>
+							--ena		<= '1';
+							--rw 		<= '0';
+							--data_wr <= "11110000"; --Write 0xFF
+							--counter <= counter + 1;
+						--when 9 =>
+							--ena		<= '0';
+							--if busy = '0' then
+								--counter <= counter + 1;
+							--end if;
+						--when 10 =>
+							--ena 	<= '1';
+							--rw 		<= '0';
+							--data_wr <= "01010101"; --Write 0xFF
+							--counter <= counter + 1;
+						--when 11 =>
+							--ena 	<= '0';
+							--if busy = '0' then
+								--counter <= counter + 1;
+							--end if;
+						--when 12 =>
+							--ena 	<= '1';
+							--rw 		<= '0';
+							--data_wr <= "11111011"; --Write 0xFF
+							--counter <= counter + 1;
+						--when 13 =>
+							--ena 	<= '0';
+							--if busy = '0' then 
+								--counter <=  counter + 1;
+							--end if;
+						--when 14 =>
+							--ena 	<= '1';
+							--rw 		<= '0';
+							--data_wr <= "00000000"; --Write 0xFF
+							--counter <= counter + 1;
+						--when 15 =>
+							--ena 	<= '0';
+							--if busy = '0' then
+								--init_done <= '1';
+								--counter <= counter + 1;
+							--end if;
 						when others =>
 							counter <= 0;
 					end case;
@@ -147,10 +262,12 @@ Begin
 							--counter <= 0;
 					--end case;
 				--end if;
-			--end if;
-		end if;
+			end if;
+		--end if;
 	end process;
 	
+	
+	counter_out <= counter;
 	busy_LED <= busy;
 	
 end logic;
