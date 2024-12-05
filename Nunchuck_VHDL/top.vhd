@@ -48,7 +48,7 @@ ARCHITECTURE logic OF top IS
 	SIGNAL read_counter 	: integer range 0 to 7 := 0;
 	
 	TYPE state_type IS (GARBAGE, GARBAGE_WAIT, IDLE, WRITE_F0, WAIT_BUSY1, WRITE_55, WAIT_BUSY2,
-                        WRITE_FB, WAIT_BUSY3, WRITE_00, DONE, WAIT_BUSY4, READ_IN, WAIT_BUSY5);
+                        WRITE_FB, WAIT_BUSY3, WRITE_00, DONE, IDLE_READ, WRITE_READ_00, WAIT_BUSY4, READ_IN, WAITING );
 	SIGNAL state       : state_type := IDLE;
 	
 Begin
@@ -79,6 +79,8 @@ Begin
             data_wr   <= (others => '0');
             init_done <= '0';
             state     <= IDLE;
+			read_counter <= 0;
+			counter <= 0;
         elsif rising_edge(clk) then
 			if init_done = '0' then
 				case state is
@@ -196,8 +198,8 @@ Begin
 							counter <= counter + 1;
 						else
 							counter <= 0;
-							state <= IDLE;
 							init_done <= '1'; -- Initialization done
+							state <= IDLE_READ;
 						end if;
 
 					when others =>
@@ -207,7 +209,7 @@ Begin
 			else 
 				
 				case state is
-					when IDLE =>
+					when IDLE_READ =>
 						-- Start the initialization sequence
 						if counter = 0 then
 							ena       	<= '1';
@@ -216,16 +218,17 @@ Begin
 							counter 	<= counter + 1;
 						elsif counter < 20 then
 							counter 	<= counter + 1;
-						else
-							state     	<= WRITE_00;
+						elsif busy = '1' then 
+							state     	<= WRITE_READ_00;
 							counter 	<= 0;
 						end if;
 
-					when WRITE_00 =>
+					when WRITE_READ_00 =>
+						ena <= '0';
 						if counter < 20 then
 							counter <= counter + 1;
 						elsif busy = '0' then
-							state <= WAIT_BUSY1;
+							state <= WAIT_BUSY4;
 							counter <= 0;
 						end if;
 
@@ -236,34 +239,40 @@ Begin
 							counter 		<= counter + 1;
 						elsif counter < 20 then
 							counter 		<= counter + 1;
-						else
+						elsif busy = '1' then
 							state     	<= READ_IN;
 							counter 		<= 0;
 						end if;
 
 					when READ_IN =>
-						--ena       <= '0';
 						if counter < 20 then
 							counter <= counter + 1;
 						elsif busy = '0' then
-							
-							state <= WAIT_BUSY2;
-							counter <= 0;
+							if read_counter < 4 then
+								read_counter <= read_counter + 1;
+								state <= WAIT_BUSY4;
+							else
+								ena       <= '0';
+								read_counter <= 0;
+								counter <= 0;
+								state <= WAITING;
+							end if;
 						end if;
-
+						
+					when WAITING =>
+						if busy = '1' then
+							state <= DONE;
+						end if;
+						
 					when DONE =>
 						-- Stay in DONE state after initialization
-						if counter < 20 then
-							counter <= counter + 1;
-						else
-							state <= IDLE;
-							counter <= 0;
-							init_done <= '0'; -- Initialization done
+						if busy = '0' then
+							state <= IDLE_READ;
 						end if;
 
 					when others =>
 						-- Default fallback to IDLE
-						state <= IDLE;
+						state <= IDLE_READ;
 				end case;
 			end if;
 		end if;
@@ -280,10 +289,11 @@ Begin
 						"0110" when state = WAIT_BUSY3 else
 						"0111" when state = WRITE_00 else
 						"1000" when state = DONE else
-						"1001" when state = WAIT_BUSY4 else
-						"1010" when state = READ_IN else
-						"1011" when state = WAIT_BUSY5 else
-						"1110" when state = GARBAGE else
+						"1001" when state = IDLE_READ else
+						"1010" when state = WRITE_READ_00 else
+						"1011" when state = WAIT_BUSY4 else
+						"1100" when state = READ_IN else
+						"1101" when state = WAITING else
 						"1111" when state = GARBAGE_WAIT; -- Default case (state = DONE or others)
 			
 	
