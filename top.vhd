@@ -21,6 +21,8 @@ architecture synth of top is
 	signal rc: unsigned(9 downto 0);	
 	signal valid_top: std_logic;
 	signal tile_address: unsigned(9 downto 0);
+	signal rgb_s: unsigned(5 downto 0);
+	signal rgb_b: unsigned(5 downto 0);
 	
 	component mypll is
     port(
@@ -79,8 +81,17 @@ architecture synth of top is
 			clk         : in  std_logic;             
 			valid       : in  std_logic;                
 			address   : in  unsigned(9 downto 0);    
-			rgb_out     : out unsigned(5 downto 0)      
+			rgb_s     : out unsigned(5 downto 0)      
 		  );
+	end component;
+	
+	component golfball_finder is
+		port(
+			clk         : in  std_logic;             
+			valid       : in  std_logic;                
+			address   : in  unsigned(9 downto 0);    
+			rgb_b     : out unsigned(5 downto 0)      
+		);
 	end component;
 	
 	signal game_clock_top: std_logic;
@@ -148,8 +159,16 @@ begin
 			clk => outglobal_o_top,            
 			valid => valid_top,
 			address =>  tile_address,
-			rgb_out => RGB    
+			rgb_s => rgb_s    
 		);	
+		
+	golfball_finder1: golfball_finder
+		port map(
+			clk => outglobal_o_top,             
+			valid => valid_top,              
+			address => tile_address, 
+			rgb_b => rgb_b     
+		);
 		
 	game_clock1: game_clock
 		port map(
@@ -159,5 +178,7 @@ begin
 			);
 			
 	gc <= game_clock_top;
+	
+	RGB <= "111111" when rgb_b = "111111" else rgb_s;
 
 end; 
