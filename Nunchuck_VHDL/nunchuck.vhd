@@ -3,21 +3,21 @@ USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE ieee.numeric_std.ALL;
 
-ENTITY top IS
+ENTITY nunchuck IS
 	port (
 		clk: IN std_logic;
 		reset_n: IN std_logic;
 		sda: INOUT STD_LOGIC;
 		scl: INOUT STD_LOGIC;
-		data_out: OUT std_logic_vector(7 DOWNTO 0);
+		--nunchuck_data 	: std_logic_vector(47 DOWNTO 0):= (others => '0');
+		swing_LED: OUT std_logic_vector(2 DOWNTO 0);
 		busy_LED: OUT std_logic;
-		--counter_out: OUT integer range 0 TO 32
 		current_state : OUT std_logic_vector(3 DOWNTO 0)
 	);
 
-End top;
+End nunchuck;
 
-ARCHITECTURE logic OF top IS
+ARCHITECTURE logic OF nunchuck IS
 	COMPONENT i2c_master 
 	GENERIC(
 		input_clk : INTEGER := 12_000_000; --input clock speed from user logic in Hz
@@ -46,6 +46,7 @@ ARCHITECTURE logic OF top IS
 	SIGNAL init_done 	: std_logic := '0';
 	SIGNAL counter		: integer range 0 TO 32 := 0;
 	SIGNAL read_counter 	: integer range 0 to 7 := 0;
+	SIGNAL nunchuck_data 	: std_logic_vector(47 DOWNTO 0):= (others => '0');
 	
 	TYPE state_type IS (GARBAGE, GARBAGE_WAIT, IDLE, WRITE_F0, WAIT_BUSY1, WRITE_55, WAIT_BUSY2,
                         WRITE_FB, WAIT_BUSY3, WRITE_00, DONE, IDLE_READ, WRITE_READ_00, WAIT_BUSY4, READ_IN, WAITING );
@@ -84,31 +85,7 @@ Begin
         elsif rising_edge(clk) then
 			if init_done = '0' then
 				case state is
-					--when GARBAGE =>
-						--ena       	<= '1';
-						--rw        	<= '0';
-						--data_wr   	<= "11110000"; -- Write 0xF0
-						--state 		<= GARBAGE_WAIT;
-						
-					--when GARBAGE_WAIT => 
-						--if counter < 20 then
-							--counter <= counter + 1;
-						--elsif busy = '0' then
-							--state <= IDLE;
-							--counter <= 0;
-						--end if;
-						
 					when IDLE =>
-						-- Start the initialization sequence
-						--if counter = 0 then
-							--ena       	<= '1';
-							--rw        	<= '0';
-							--data_wr   	<= "11110000"; -- Write 0xF0
-							--counter 	<= counter + 1;
-						--elsif busy = '1' and counter = 1 then
-							--state     	<= WRITE_F0;
-							--counter 	<= 0;
-						--end if;
 						ena       	<= '1';
 						rw        	<= '0';
 						data_wr   	<= "11110000"; -- Write 0xF0
@@ -248,10 +225,24 @@ Begin
 						if counter < 20 then
 							counter <= counter + 1;
 						elsif busy = '0' then
-							if read_counter < 4 then
+							if read_counter = 0 then
+								nunchuck_data(47 DOWNTO 40) <= data_rd;
+								read_counter <= read_counter + 1;
+								state <= WAIT_BUSY4;
+							elsif read_counter = 1 then
+								nunchuck_data(39 DOWNTO 32) <= data_rd;
+								read_counter <= read_counter + 1;
+								state <= WAIT_BUSY4;
+							elsif read_counter = 2 then
+								nunchuck_data(31 DOWNTO 24) <= data_rd;
+								read_counter <= read_counter + 1;
+								state <= WAIT_BUSY4;
+							elsif read_counter = 3 then
+								nunchuck_data(23 DOWNTO 16) <= data_rd;
 								read_counter <= read_counter + 1;
 								state <= WAIT_BUSY4;
 							else
+								nunchuck_data(15 DOWNTO 8) <= data_rd;
 								ena       <= '0';
 								read_counter <= 0;
 								counter <= 0;
@@ -267,6 +258,7 @@ Begin
 					when DONE =>
 						-- Stay in DONE state after initialization
 						if busy = '0' then
+							nunchuck_data(7 DOWNTO 0) <= data_rd;
 							state <= IDLE_READ;
 						end if;
 
@@ -295,6 +287,10 @@ Begin
 						"1100" when state = READ_IN else
 						"1101" when state = WAITING else
 						"1111" when state = GARBAGE_WAIT; -- Default case (state = DONE or others)
+	swing_LED <= "111" when unsigned(nunchuck_data(23 DOWNTO 16)) = 255 else
+             "011" when unsigned(nunchuck_data(23 DOWNTO 16)) > 230 else
+             "001" when unsigned(nunchuck_data(23 DOWNTO 16)) > 200 else
+             "000";
 			
 	
 end logic;
