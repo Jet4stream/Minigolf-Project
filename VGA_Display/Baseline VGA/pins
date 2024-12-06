@@ -1,0 +1,8 @@
+RGB[5] = 44
+RGB[4] = 4
+RGB[3] = 3
+RGB[2] = 48
+RGB[1] = 45 
+RGB[0] = 47
+HSYNC_top = 46
+VSYNC_top = 2
