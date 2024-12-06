@@ -27,19 +27,20 @@ ball_address_y <= address_y(9 downto 4);
 
 process (clk) begin
 	if rising_edge(clk) then
-		if valid = '0' then
-			rgb_out <= "000000"; -- Default to black	
-		elsif first_time = '0' then
-			ball_x <= "011111"; 
-			ball_y <= "010111";
-			first_time <= '1';
-		elsif (ball_address_x = ball_x and ball_address_y = ball_y) then
-			rgb_out <= "111111";
-		else 
-			rgb_out <= "000000";
-		end if;
+		--if address_x = 640 and address_y = 480 then
+			if valid = '0' then
+				rgb_out <= "000000"; -- Default to black	
+			elsif first_time = '0' then
+				ball_x <= "011111"; 
+				ball_y <= "010111";
+				first_time <= '1';
+			elsif (ball_address_x = ball_x and ball_address_y = ball_y) then
+				rgb_out <= "111111";
+			else 
+				rgb_out <= "000000";
+			end if;
+		--end if;
 	end if;
 	
-
 end process;
 end synth;
