@@ -9,10 +9,7 @@ ENTITY nunchuck IS
 		reset_n: IN std_logic;
 		sda: INOUT STD_LOGIC;
 		scl: INOUT STD_LOGIC;
-		--nunchuck_data 	: std_logic_vector(47 DOWNTO 0):= (others => '0');
-		swing_LED: OUT std_logic_vector(2 DOWNTO 0);
-		busy_LED: OUT std_logic;
-		current_state : OUT std_logic_vector(3 DOWNTO 0)
+		nunchuck_data 	: OUT std_logic_vector(47 DOWNTO 0)
 	);
 
 End nunchuck;
@@ -38,7 +35,7 @@ ARCHITECTURE logic OF nunchuck IS
 	
 	SIGNAL ena			: std_logic:= '0';
 	SIGNAL busy			: std_logic;
-	SIGNAL ack_error	: std_logic;
+	SIGNAL ack_error		: std_logic;
 	SIGNAL rw			: std_logic;
 	SIGNAL data_addr	: std_logic_vector(6 DOWNTO 0):= "1010010";
 	SIGNAL data_wr		: std_logic_vector(7 DOWNTO 0);
@@ -46,7 +43,7 @@ ARCHITECTURE logic OF nunchuck IS
 	SIGNAL init_done 	: std_logic := '0';
 	SIGNAL counter		: integer range 0 TO 32 := 0;
 	SIGNAL read_counter 	: integer range 0 to 7 := 0;
-	SIGNAL nunchuck_data 	: std_logic_vector(47 DOWNTO 0):= (others => '0');
+	--SIGNAL nunchuck_data 	: std_logic_vector(47 DOWNTO 0):= (others => '0');
 	
 	TYPE state_type IS (GARBAGE, GARBAGE_WAIT, IDLE, WRITE_F0, WAIT_BUSY1, WRITE_55, WAIT_BUSY2,
                         WRITE_FB, WAIT_BUSY3, WRITE_00, DONE, IDLE_READ, WRITE_READ_00, WAIT_BUSY4, READ_IN, WAITING );
@@ -271,26 +268,26 @@ Begin
 	end process;
 	
 	--busy_LED <= init_done;
-	busy_LED <= busy;
-    current_state <= 	"0000" when state = IDLE else
-						"0001" when state = WRITE_F0 else
-						"0010" when state = WAIT_BUSY1 else
-						"0011" when state = WRITE_55 else
-						"0100" when state = WAIT_BUSY2 else
-						"0101" when state = WRITE_FB else
-						"0110" when state = WAIT_BUSY3 else
-						"0111" when state = WRITE_00 else
-						"1000" when state = DONE else
-						"1001" when state = IDLE_READ else
-						"1010" when state = WRITE_READ_00 else
-						"1011" when state = WAIT_BUSY4 else
-						"1100" when state = READ_IN else
-						"1101" when state = WAITING else
-						"1111" when state = GARBAGE_WAIT; -- Default case (state = DONE or others)
-	swing_LED <= "111" when unsigned(nunchuck_data(23 DOWNTO 16)) = 255 else
-             "011" when unsigned(nunchuck_data(23 DOWNTO 16)) > 230 else
-             "001" when unsigned(nunchuck_data(23 DOWNTO 16)) > 200 else
-             "000";
+	--busy_LED <= busy;
+    --current_state <= 	"0000" when state = IDLE else
+						--"0001" when state = WRITE_F0 else
+						--"0010" when state = WAIT_BUSY1 else
+						--"0011" when state = WRITE_55 else
+						--"0100" when state = WAIT_BUSY2 else
+						--"0101" when state = WRITE_FB else
+						--"0110" when state = WAIT_BUSY3 else
+						--"0111" when state = WRITE_00 else
+						--"1000" when state = DONE else
+						--"1001" when state = IDLE_READ else
+						--"1010" when state = WRITE_READ_00 else
+						--"1011" when state = WAIT_BUSY4 else
+						--"1100" when state = READ_IN else
+						--"1101" when state = WAITING else
+						--"1111" when state = GARBAGE_WAIT; -- Default case (state = DONE or others)
+	--swing_LED <= "111" when unsigned(nunchuck_data(23 DOWNTO 16)) = 255 else
+             --"011" when unsigned(nunchuck_data(23 DOWNTO 16)) > 230 else
+             --"001" when unsigned(nunchuck_data(23 DOWNTO 16)) > 200 else
+             --"000";
 			
 	
 end logic;
