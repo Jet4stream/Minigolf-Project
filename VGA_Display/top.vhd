@@ -7,13 +7,13 @@ entity top is
 		HSYNC_top: out std_logic;
 		VSYNC_top: out std_logic;
 		RGB: out unsigned(5 downto 0);
+		ref_clk_i_top: in std_logic;
 		gc: out std_logic
 	); 
 end;
 
 architecture synth of top is
 	signal count: unsigned(25 downto 0);
-	signal ref_clk_i_top: std_logic;
 	signal first_time: std_logic := '0';
 	signal outcore_o_top: std_logic;
 	signal outglobal_o_top: std_logic;
@@ -34,17 +34,6 @@ architecture synth of top is
 	end component;
 
 	signal clk: std_logic;
-  
-	component HSOSC is
-		generic (
-			CLKHF_DIV : String := "0b10"
-		);
-		port(
-			CLKHFPU : in std_logic := 'X'; 
-			CLKHFEN : in std_logic := 'X';
-			CLKHF   : out std_logic := 'X'        
-		);
-	end component;
 	
 	component vga is
 		port(
@@ -56,16 +45,6 @@ architecture synth of top is
 			valid_vga: out std_logic
 		);
 	end component;
-	
-	--component game_renderer is 
-		--port (
-			--clk         : in  std_logic;             
-			--reset       : in  std_logic;                
-			--address_x   : in  unsigned(9 downto 0);    
-			--address_y   : in  unsigned(9 downto 0);     
-			--rgb_out     : out unsigned(5 downto 0)
-		--);
-	--end component;
 	
 	component tile_finder is
 		port(
@@ -107,16 +86,6 @@ architecture synth of top is
 	signal select_btn_top: std_logic := '0';
 	
 begin
-	ref_clk_i_top <= clk;
-
-	osc : HSOSC 
-		generic map (CLKHF_DIV => "0b10")
-		port map (
-			CLKHFPU => '1',
-			CLKHFEN => '1',
-			CLKHF => clk
-		);
-
 	
 	pll : mypll 
 		port map(
