@@ -10,10 +10,10 @@ ENTITY game_logic IS
 		reset_n: IN std_logic;
 		sda: INOUT STD_LOGIC;
 		scl: INOUT STD_LOGIC;
-		--ball_x: INOUT unsigned(9 downto 0);
-		--ball_y: INOUT unsigned(9 downto 0);
-		swing_LED: OUT std_logic_vector(2 DOWNTO 0);
-		out_speed: OUT unsigned(4 Downto 0);
+		ball_x: INOUT unsigned(9 downto 0);
+		ball_y: INOUT unsigned(9 downto 0);
+		--swing_LED: OUT std_logic_vector(2 DOWNTO 0);
+		--out_speed: OUT unsigned(4 Downto 0);
 		current_d_state: OUT std_logic_vector(1 Downto 0);
 		current_c_state: OUT std_logic_vector(1 Downto 0)
 	);
@@ -138,16 +138,47 @@ Begin
 				counter <= 0;
 				if speed = 0 and nunchuck_data(1) = '0' then
 					if unsigned(nunchuck_data(23 DOWNTO 16)) = 255 then
-						speed <= "11111";
+						case club_state is 
+							when DRIVER =>
+								speed <= "11000";
+							when IRON =>
+								speed <= "10101";
+							when PUTTER =>
+								speed <= "01110";
+						end case;
 					elsif unsigned(nunchuck_data(23 DOWNTO 16)) > 230 then
-						speed <= "01111";
+						case club_state is 
+							when DRIVER =>
+								speed <= "10110";
+							when IRON =>
+								speed <= "10010";
+							when PUTTER =>
+								speed <= "01011";
+						end case;
 					elsif unsigned(nunchuck_data(23 DOWNTO 16)) > 200 then
-						speed <= "00111";
+						case club_state is 
+							when DRIVER =>
+								speed <= "10011";
+							when IRON =>
+								speed <= "01100";
+							when PUTTER =>
+								speed <= "01000";
+						end case;
 					end if;
 				elsif speed /= 0 then
 					if slowdown_counter < 6 then
 						slowdown_counter <= slowdown_counter + 1;
 					else
+						case direction_state is 
+							when LEFT_DIRECTION =>
+								ball_x <= ball_x - speed;
+							when UP_DIRECTION => 
+								ball_y <= ball_y + speed;
+							when RIGHT_DIRECTION =>
+								ball_x <= ball_x + speed;
+							when DOWN_DIRECTION =>
+								ball_y <= ball_y - speed;
+						end case;
 						speed <= speed - 1;
 						slowdown_counter <= 0;
 					end if;
@@ -159,16 +190,16 @@ Begin
 	end process;
 	
 	
-	out_speed <= speed;
-	swing_LED <= "111" when unsigned(nunchuck_data(23 DOWNTO 16)) = 255 else
-             "011" when unsigned(nunchuck_data(23 DOWNTO 16)) > 230 else
-             "001" when unsigned(nunchuck_data(23 DOWNTO 16)) > 200 else
-             "000";
-	current_d_state <= 	"00" when direction_state = LEFT_DIRECTION else
+	--out_speed <= speed;
+	--swing_LED <= "111" when unsigned(nunchuck_data(23 DOWNTO 16)) = 255 else
+             --"011" when unsigned(nunchuck_data(23 DOWNTO 16)) > 230 else
+             --"001" when unsigned(nunchuck_data(23 DOWNTO 16)) > 200 else
+             --"000";
+	current_d_state <= "00" when direction_state = LEFT_DIRECTION else
 						"01" when direction_state = UP_DIRECTION else
 						"10" when direction_state = RIGHT_DIRECTION else
 						"11" when direction_state = DOWN_DIRECTION;
-	current_c_state <= 	"00" when club_state = DRIVER else
+	current_c_state <= "00" when club_state = DRIVER else
 						"01" when club_state = IRON else
 						"10" when club_state = PUTTER;
 
