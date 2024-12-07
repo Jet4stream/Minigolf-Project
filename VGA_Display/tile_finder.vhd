@@ -1,0 +1,331 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity tile_finder is
+  port(
+    clk         : in  std_logic;             
+    valid       : in  std_logic;                
+    address_x   : in  unsigned(9 downto 0);    
+    address_y   : in  unsigned(9 downto 0); 
+	rgb_out: out unsigned(5 downto 0);
+    tile     : out unsigned(9 downto 0)      
+  );
+end tile_finder;
+
+architecture synth of tile_finder is
+
+begin
+process (clk) begin
+	if rising_edge(clk) then
+		tile(9 downto 5) <= address_y(9 downto 5);
+		tile(4 downto 0) <= address_x(9 downto 5);
+			--address_x <= address_x_in(9 downto 5);
+			--address_y <= address_y_in(9 downto 5);
+	end if;
+end process;
+
+--when else statements
+        --rgb_out <= "001000"  when address_x = 0 and address_y = 0 else 
+        --"001000"  when address_x = 1 and address_y = 0 else 
+        --"001000"  when address_x = 2 and address_y = 0 else 
+        --"001000"  when address_x = 3 and address_y = 0 else 
+        --"001000"  when address_x = 4 and address_y = 0 else 
+        --"001000"  when address_x = 5 and address_y = 0 else 
+        --"001000"  when address_x = 6 and address_y = 0 else 
+        --"001000"  when address_x = 7 and address_y = 0 else 
+        --"001000"  when address_x = 8 and address_y = 0 else 
+        --"001000"  when address_x = 9 and address_y = 0 else 
+        --"001000"  when address_x = 10 and address_y = 0 else 
+        --"001000"  when address_x = 11 and address_y = 0 else 
+        --"001000"  when address_x = 12 and address_y = 0 else 
+        --"001000"  when address_x = 13 and address_y = 0 else 
+        --"001000"  when address_x = 14 and address_y = 0 else 
+        --"001000"  when address_x = 15 and address_y = 0 else 
+        --"001000"  when address_x = 16 and address_y = 0 else 
+        --"001000"  when address_x = 17 and address_y = 0 else 
+        --"001000"  when address_x = 18 and address_y = 0 else 
+        --"001000"  when address_x = 19 and address_y = 0 else 
+        --"001000"  when address_x = 0 and address_y = 1 else 
+        --"001100"  when address_x = 1 and address_y = 1 else 
+        --"001100"  when address_x = 2 and address_y = 1 else 
+        --"001100"  when address_x = 3 and address_y = 1 else 
+        --"001100"  when address_x = 4 and address_y = 1 else 
+        --"001100"  when address_x = 5 and address_y = 1 else 
+        --"001100"  when address_x = 6 and address_y = 1 else 
+        --"000111"  when address_x = 7 and address_y = 1 else 
+        --"000111"  when address_x = 8 and address_y = 1 else 
+        --"000111"  when address_x = 9 and address_y = 1 else 
+        --"000111"  when address_x = 10 and address_y = 1 else 
+        --"000100"  when address_x = 11 and address_y = 1 else 
+        --"000100"  when address_x = 12 and address_y = 1 else 
+        --"000100"  when address_x = 13 and address_y = 1 else 
+        --"000100"  when address_x = 14 and address_y = 1 else 
+        --"000100"  when address_x = 15 and address_y = 1 else 
+        --"000100"  when address_x = 16 and address_y = 1 else 
+        --"000100"  when address_x = 17 and address_y = 1 else 
+        --"000100"  when address_x = 18 and address_y = 1 else 
+        --"001000"  when address_x = 19 and address_y = 1 else 
+        --"001000"  when address_x = 0 and address_y = 2 else 
+        --"001100"  when address_x = 1 and address_y = 2 else 
+        --"000000"  when address_x = 2 and address_y = 2 else 
+        --"001100"  when address_x = 3 and address_y = 2 else 
+        --"001100"  when address_x = 4 and address_y = 2 else 
+        --"001100"  when address_x = 5 and address_y = 2 else 
+        --"001100"  when address_x = 6 and address_y = 2 else 
+        --"000111"  when address_x = 7 and address_y = 2 else 
+        --"000111"  when address_x = 8 and address_y = 2 else 
+        --"000111"  when address_x = 9 and address_y = 2 else 
+        --"000111"  when address_x = 10 and address_y = 2 else 
+        --"000111"  when address_x = 11 and address_y = 2 else 
+        --"000100"  when address_x = 12 and address_y = 2 else 
+        --"000100"  when address_x = 13 and address_y = 2 else 
+        --"000100"  when address_x = 14 and address_y = 2 else 
+        --"000100"  when address_x = 15 and address_y = 2 else 
+        --"000100"  when address_x = 16 and address_y = 2 else 
+        --"000100"  when address_x = 17 and address_y = 2 else 
+        --"000100"  when address_x = 18 and address_y = 2 else 
+        --"001000"  when address_x = 19 and address_y = 2 else 
+        --"001000"  when address_x = 0 and address_y = 3 else 
+        --"001100"  when address_x = 1 and address_y = 3 else 
+        --"001100"  when address_x = 2 and address_y = 3 else 
+        --"001100"  when address_x = 3 and address_y = 3 else 
+        --"001100"  when address_x = 4 and address_y = 3 else 
+        --"001100"  when address_x = 5 and address_y = 3 else 
+        --"001100"  when address_x = 6 and address_y = 3 else 
+        --"001100"  when address_x = 7 and address_y = 3 else 
+        --"000111"  when address_x = 8 and address_y = 3 else 
+        --"000111"  when address_x = 9 and address_y = 3 else 
+        --"000111"  when address_x = 10 and address_y = 3 else 
+        --"000100"  when address_x = 11 and address_y = 3 else 
+        --"000100"  when address_x = 12 and address_y = 3 else 
+        --"000100"  when address_x = 13 and address_y = 3 else 
+        --"000100"  when address_x = 14 and address_y = 3 else 
+        --"000100"  when address_x = 15 and address_y = 3 else 
+        --"000100"  when address_x = 16 and address_y = 3 else 
+        --"000100"  when address_x = 17 and address_y = 3 else 
+        --"000100"  when address_x = 18 and address_y = 3 else 
+        --"001000"  when address_x = 19 and address_y = 3 else 
+        --"001000"  when address_x = 0 and address_y = 4 else 
+        --"001100"  when address_x = 1 and address_y = 4 else 
+        --"001100"  when address_x = 2 and address_y = 4 else 
+        --"001100"  when address_x = 3 and address_y = 4 else 
+        --"001100"  when address_x = 4 and address_y = 4 else 
+        --"001100"  when address_x = 5 and address_y = 4 else 
+        --"001100"  when address_x = 6 and address_y = 4 else 
+        --"000111"  when address_x = 7 and address_y = 4 else 
+        --"000111"  when address_x = 8 and address_y = 4 else 
+        --"000111"  when address_x = 9 and address_y = 4 else 
+        --"000111"  when address_x = 10 and address_y = 4 else 
+        --"001100"  when address_x = 11 and address_y = 4 else 
+        --"001100"  when address_x = 12 and address_y = 4 else 
+        --"001100"  when address_x = 13 and address_y = 4 else 
+        --"001100"  when address_x = 14 and address_y = 4 else 
+        --"001100"  when address_x = 15 and address_y = 4 else 
+        --"000100"  when address_x = 16 and address_y = 4 else 
+        --"000100"  when address_x = 17 and address_y = 4 else 
+        --"000100"  when address_x = 18 and address_y = 4 else 
+        --"001000"  when address_x = 19 and address_y = 4 else 
+        --"001000"  when address_x = 0 and address_y = 5 else 
+        --"001100"  when address_x = 1 and address_y = 5 else 
+        --"001100"  when address_x = 2 and address_y = 5 else 
+        --"001100"  when address_x = 3 and address_y = 5 else 
+        --"001100"  when address_x = 4 and address_y = 5 else 
+        --"001100"  when address_x = 5 and address_y = 5 else 
+        --"000111"  when address_x = 6 and address_y = 5 else 
+        --"000111"  when address_x = 7 and address_y = 5 else 
+        --"001100"  when address_x = 8 and address_y = 5 else 
+        --"001100"  when address_x = 9 and address_y = 5 else 
+        --"001100"  when address_x = 10 and address_y = 5 else 
+        --"001100"  when address_x = 11 and address_y = 5 else 
+        --"001100"  when address_x = 12 and address_y = 5 else 
+        --"001100"  when address_x = 13 and address_y = 5 else 
+        --"001100"  when address_x = 14 and address_y = 5 else 
+        --"001100"  when address_x = 15 and address_y = 5 else 
+        --"001100"  when address_x = 16 and address_y = 5 else 
+        --"000100"  when address_x = 17 and address_y = 5 else 
+        --"000100"  when address_x = 18 and address_y = 5 else 
+        --"001000"  when address_x = 19 and address_y = 5 else 
+        --"001000"  when address_x = 0 and address_y = 6 else 
+        --"000111"  when address_x = 1 and address_y = 6 else 
+        --"001100"  when address_x = 2 and address_y = 6 else 
+        --"001100"  when address_x = 3 and address_y = 6 else 
+        --"000111"  when address_x = 4 and address_y = 6 else 
+        --"000111"  when address_x = 5 and address_y = 6 else 
+        --"000111"  when address_x = 6 and address_y = 6 else 
+        --"001100"  when address_x = 7 and address_y = 6 else 
+        --"001100"  when address_x = 8 and address_y = 6 else 
+        --"001100"  when address_x = 9 and address_y = 6 else 
+        --"001100"  when address_x = 10 and address_y = 6 else 
+        --"001100"  when address_x = 11 and address_y = 6 else 
+        --"001100"  when address_x = 12 and address_y = 6 else 
+        --"001100"  when address_x = 13 and address_y = 6 else 
+        --"001100"  when address_x = 14 and address_y = 6 else 
+        --"111000"  when address_x = 15 and address_y = 6 else 
+        --"001100"  when address_x = 16 and address_y = 6 else 
+        --"000100"  when address_x = 17 and address_y = 6 else 
+        --"000100"  when address_x = 18 and address_y = 6 else 
+        --"001000"  when address_x = 19 and address_y = 6 else 
+        --"001000"  when address_x = 0 and address_y = 7 else 
+        --"000111"  when address_x = 1 and address_y = 7 else 
+        --"000111"  when address_x = 2 and address_y = 7 else 
+        --"000111"  when address_x = 3 and address_y = 7 else 
+        --"000111"  when address_x = 4 and address_y = 7 else 
+        --"000111"  when address_x = 5 and address_y = 7 else 
+        --"001100"  when address_x = 6 and address_y = 7 else 
+        --"001100"  when address_x = 7 and address_y = 7 else 
+        --"001100"  when address_x = 8 and address_y = 7 else 
+        --"001100"  when address_x = 9 and address_y = 7 else 
+        --"001100"  when address_x = 10 and address_y = 7 else 
+        --"001100"  when address_x = 11 and address_y = 7 else 
+        --"001100"  when address_x = 12 and address_y = 7 else 
+        --"001100"  when address_x = 13 and address_y = 7 else 
+        --"111000"  when address_x = 14 and address_y = 7 else 
+        --"111000"  when address_x = 15 and address_y = 7 else 
+        --"001100"  when address_x = 16 and address_y = 7 else 
+        --"000100"  when address_x = 17 and address_y = 7 else 
+        --"000100"  when address_x = 18 and address_y = 7 else 
+        --"001000"  when address_x = 19 and address_y = 7 else 
+        --"001000"  when address_x = 0 and address_y = 8 else 
+        --"000111"  when address_x = 1 and address_y = 8 else 
+        --"000111"  when address_x = 2 and address_y = 8 else 
+        --"000111"  when address_x = 3 and address_y = 8 else 
+        --"000111"  when address_x = 4 and address_y = 8 else 
+        --"001100"  when address_x = 5 and address_y = 8 else 
+        --"001100"  when address_x = 6 and address_y = 8 else 
+        --"001100"  when address_x = 7 and address_y = 8 else 
+        --"001100"  when address_x = 8 and address_y = 8 else 
+        --"001100"  when address_x = 9 and address_y = 8 else 
+        --"001100"  when address_x = 10 and address_y = 8 else 
+        --"001100"  when address_x = 11 and address_y = 8 else 
+        --"001100"  when address_x = 12 and address_y = 8 else 
+        --"001100"  when address_x = 13 and address_y = 8 else 
+        --"001100"  when address_x = 14 and address_y = 8 else 
+        --"001100"  when address_x = 15 and address_y = 8 else 
+        --"001100"  when address_x = 16 and address_y = 8 else 
+        --"000100"  when address_x = 17 and address_y = 8 else 
+        --"000100"  when address_x = 18 and address_y = 8 else 
+        --"001000"  when address_x = 19 and address_y = 8 else 
+        --"001000"  when address_x = 0 and address_y = 9 else 
+        --"000111"  when address_x = 1 and address_y = 9 else 
+        --"000111"  when address_x = 2 and address_y = 9 else 
+        --"000111"  when address_x = 3 and address_y = 9 else 
+        --"000111"  when address_x = 4 and address_y = 9 else 
+        --"001100"  when address_x = 5 and address_y = 9 else 
+        --"001100"  when address_x = 6 and address_y = 9 else 
+        --"001100"  when address_x = 7 and address_y = 9 else 
+        --"001100"  when address_x = 8 and address_y = 9 else 
+        --"001100"  when address_x = 9 and address_y = 9 else 
+        --"001100"  when address_x = 10 and address_y = 9 else 
+        --"001100"  when address_x = 11 and address_y = 9 else 
+        --"001100"  when address_x = 12 and address_y = 9 else 
+        --"001100"  when address_x = 13 and address_y = 9 else 
+        --"001100"  when address_x = 14 and address_y = 9 else 
+        --"001100"  when address_x = 15 and address_y = 9 else 
+        --"001100"  when address_x = 16 and address_y = 9 else 
+        --"000100"  when address_x = 17 and address_y = 9 else 
+        --"000100"  when address_x = 18 and address_y = 9 else 
+        --"001000"  when address_x = 19 and address_y = 9 else 
+        --"001000"  when address_x = 0 and address_y = 10 else 
+        --"000100"  when address_x = 1 and address_y = 10 else 
+        --"000100"  when address_x = 2 and address_y = 10 else 
+        --"000100"  when address_x = 3 and address_y = 10 else 
+        --"000100"  when address_x = 4 and address_y = 10 else 
+        --"001100"  when address_x = 5 and address_y = 10 else 
+        --"001100"  when address_x = 6 and address_y = 10 else 
+        --"001100"  when address_x = 7 and address_y = 10 else 
+        --"001100"  when address_x = 8 and address_y = 10 else 
+        --"001100"  when address_x = 9 and address_y = 10 else 
+        --"001100"  when address_x = 10 and address_y = 10 else 
+        --"001100"  when address_x = 11 and address_y = 10 else 
+        --"001100"  when address_x = 12 and address_y = 10 else 
+        --"001100"  when address_x = 13 and address_y = 10 else 
+        --"001100"  when address_x = 14 and address_y = 10 else 
+        --"001100"  when address_x = 15 and address_y = 10 else 
+        --"001100"  when address_x = 16 and address_y = 10 else 
+        --"000100"  when address_x = 17 and address_y = 10 else 
+        --"000100"  when address_x = 18 and address_y = 10 else 
+        --"001000"  when address_x = 19 and address_y = 10 else 
+        --"001000"  when address_x = 0 and address_y = 11 else 
+        --"000100"  when address_x = 1 and address_y = 11 else 
+        --"000100"  when address_x = 2 and address_y = 11 else 
+        --"000100"  when address_x = 3 and address_y = 11 else 
+        --"000100"  when address_x = 4 and address_y = 11 else 
+        --"000100"  when address_x = 5 and address_y = 11 else 
+        --"001100"  when address_x = 6 and address_y = 11 else 
+        --"111000"  when address_x = 7 and address_y = 11 else 
+        --"111000"  when address_x = 8 and address_y = 11 else 
+        --"111000"  when address_x = 9 and address_y = 11 else 
+        --"001100"  when address_x = 10 and address_y = 11 else 
+        --"001100"  when address_x = 11 and address_y = 11 else 
+        --"001100"  when address_x = 12 and address_y = 11 else 
+        --"001100"  when address_x = 13 and address_y = 11 else 
+        --"001100"  when address_x = 14 and address_y = 11 else 
+        --"001100"  when address_x = 15 and address_y = 11 else 
+        --"001100"  when address_x = 16 and address_y = 11 else 
+        --"000100"  when address_x = 17 and address_y = 11 else 
+        --"000100"  when address_x = 18 and address_y = 11 else 
+        --"001000"  when address_x = 19 and address_y = 11 else 
+        --"001000"  when address_x = 0 and address_y = 12 else 
+        --"000100"  when address_x = 1 and address_y = 12 else 
+        --"000100"  when address_x = 2 and address_y = 12 else 
+        --"000100"  when address_x = 3 and address_y = 12 else 
+        --"000100"  when address_x = 4 and address_y = 12 else 
+        --"000100"  when address_x = 5 and address_y = 12 else 
+        --"000100"  when address_x = 6 and address_y = 12 else 
+        --"001100"  when address_x = 7 and address_y = 12 else 
+        --"001100"  when address_x = 8 and address_y = 12 else 
+        --"001100"  when address_x = 9 and address_y = 12 else 
+        --"001100"  when address_x = 10 and address_y = 12 else 
+        --"001100"  when address_x = 11 and address_y = 12 else 
+        --"001100"  when address_x = 12 and address_y = 12 else 
+        --"001100"  when address_x = 13 and address_y = 12 else 
+        --"001100"  when address_x = 14 and address_y = 12 else 
+        --"001100"  when address_x = 15 and address_y = 12 else 
+        --"000100"  when address_x = 16 and address_y = 12 else 
+        --"000100"  when address_x = 17 and address_y = 12 else 
+        --"000100"  when address_x = 18 and address_y = 12 else 
+        --"001000"  when address_x = 19 and address_y = 12 else 
+        --"001000"  when address_x = 0 and address_y = 13 else 
+        --"000100"  when address_x = 1 and address_y = 13 else 
+        --"000100"  when address_x = 2 and address_y = 13 else 
+        --"000100"  when address_x = 3 and address_y = 13 else 
+        --"000100"  when address_x = 4 and address_y = 13 else 
+        --"000100"  when address_x = 5 and address_y = 13 else 
+        --"000100"  when address_x = 6 and address_y = 13 else 
+        --"000100"  when address_x = 7 and address_y = 13 else 
+        --"000100"  when address_x = 8 and address_y = 13 else 
+        --"000100"  when address_x = 9 and address_y = 13 else 
+        --"000100"  when address_x = 10 and address_y = 13 else 
+        --"000100"  when address_x = 11 and address_y = 13 else 
+        --"000100"  when address_x = 12 and address_y = 13 else 
+        --"000100"  when address_x = 13 and address_y = 13 else 
+        --"000100"  when address_x = 14 and address_y = 13 else 
+        --"000100"  when address_x = 15 and address_y = 13 else 
+        --"000100"  when address_x = 16 and address_y = 13 else 
+        --"000100"  when address_x = 17 and address_y = 13 else 
+        --"000100"  when address_x = 18 and address_y = 13 else 
+        --"001000"  when address_x = 19 and address_y = 13 else 
+        --"001000"  when address_x = 0 and address_y = 14 else 
+        --"001000"  when address_x = 1 and address_y = 14 else 
+        --"001000"  when address_x = 2 and address_y = 14 else 
+        --"001000"  when address_x = 3 and address_y = 14 else 
+        --"001000"  when address_x = 4 and address_y = 14 else 
+        --"001000"  when address_x = 5 and address_y = 14 else 
+        --"001000"  when address_x = 6 and address_y = 14 else 
+        --"001000"  when address_x = 7 and address_y = 14 else 
+        --"001000"  when address_x = 8 and address_y = 14 else 
+        --"001000"  when address_x = 9 and address_y = 14 else 
+        --"001000"  when address_x = 10 and address_y = 14 else 
+        --"001000"  when address_x = 11 and address_y = 14 else 
+        --"001000"  when address_x = 12 and address_y = 14 else 
+        --"001000"  when address_x = 13 and address_y = 14 else 
+        --"001000"  when address_x = 14 and address_y = 14 else 
+        --"001000"  when address_x = 15 and address_y = 14 else 
+        --"001000"  when address_x = 16 and address_y = 14 else 
+        --"001000"  when address_x = 17 and address_y = 14 else 
+        --"001000"  when address_x = 18 and address_y = 14 else 
+        --"001000"  when address_x = 19 and address_y = 14 else 
+        --"000000"; -- Default to black
+
+end synth;
