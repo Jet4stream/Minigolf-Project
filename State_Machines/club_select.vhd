@@ -5,15 +5,14 @@ use IEEE.numeric_std.all;
 
 entity club_select is
 	port (
-		joystick: in std_logic_vector(7 downto 0);
-		c_button: in std_logic;
+		selected: in std_logic_vector(1 downto 0);
 		hit: in std_logic; -- has the ball been hit?
 		clk: in std_logic; -- game clock
 		variety: in std_logic_vector(1 downto 0);
 		-- 00 is high, 10 is medium, 10 is high
-		club_graphics: out unsigned(1 downto 0);
 		--selected: out unsigned(1 downto 0); 
-		speed: out unsigned(4 downto 0); 
+		new_speed: out unsigned(4 downto 0); 
+		--location: out 
 		
 	);
 end;
@@ -63,32 +62,6 @@ begin
 					slow_down_clock <= 21b"0";
 					speed <= speed - 1;
 					-- should also update location here where change in location is the speed
-				end if;
-			else	
-				if (first_time = '0') then -- select state for play
-					hover <= "00"; 
-					first_time <= '1';
-				elsif (c_button '1') then
-					selected <= hover;
-				elsif (joystick = "11111111") then
-					if (hover = "10") then 
-						hover <= "00"
-						club_graphics <= "00";
-					else 
-						hover <= hover + 1;
-						club_graphics <= hover + 1;
-					end if;
-				elsif (joystick = "00000000") then
-					if (hover = "00") then 
-						hover <= "10"; 
-						club_graphics <= "10";
-					else 
-						hover <= hover - 1;
-						club_graphics <= hover - 1;
-					end if;
-				else 
-					hover <= "00";
-					club_graphics <= "00";
 				end if;
 			end if;
 		end if;
