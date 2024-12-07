@@ -6,3 +6,4 @@ RGB[1] = 45
 RGB[0] = 47
 HSYNC_top = 46
 VSYNC_top = 2
+ref_clk_i_top = 20
