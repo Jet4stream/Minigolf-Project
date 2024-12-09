@@ -1,0 +1,77 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity club_display is
+    port(
+        clk         : in  std_logic;             
+        valid       : in  std_logic;                
+        address_x   : in  unsigned(9 downto 0);  
+        address_y   : in  unsigned(9 downto 0);
+        clubs       : in  std_logic_vector(1 downto 0);
+        rgb_c       : out unsigned(5 downto 0)      
+    );
+end club_display;
+
+architecture synth of club_display is
+    signal rgb_out: unsigned(5 downto 0);
+begin
+    process (clk)
+    begin
+        if rising_edge(clk) then
+            if valid = '0' then
+                rgb_out <= "000000"; -- Default to black
+            elsif clubs = "00" then
+                if (address_x(9 downto 4) = "000010" and (address_y(9 downto 4) = "100011" or 
+                                                        address_y(9 downto 4) = "100100" or 
+                                                        address_y(9 downto 4) = "100101" or 
+                                                        address_y(9 downto 4) = "100110")) then
+                    rgb_out <= "111111";
+                elsif (address_x(9 downto 4) = "000011" and (address_y(9 downto 4) = "100011" or 
+                                                              address_y(9 downto 4) = "100110")) then
+                    rgb_out <= "111111";
+                elsif (address_x(9 downto 4) = "000100" and (address_y(9 downto 4) = "100100" or 
+                                                              address_y(9 downto 4) = "100101")) then
+                    rgb_out <= "111111";
+                else
+                    rgb_out <= "000000";
+                end if;
+            elsif clubs = "01" then
+                if (address_x(9 downto 4) = "000010" and (address_y(9 downto 4) = "100011" or 
+                                                          address_y(9 downto 4) = "100110")) then
+                    rgb_out <= "111111";
+                elsif (address_x(9 downto 4) = "000011" and (address_y(9 downto 4) = "100011" or 
+                                                              address_y(9 downto 4) = "100100" or 
+                                                              address_y(9 downto 4) = "100101" or 
+                                                              address_y(9 downto 4) = "100110")) then
+                    rgb_out <= "111111";
+                elsif (address_x(9 downto 4) = "000100" and (address_y(9 downto 4) = "100011" or 
+                                                              address_y(9 downto 4) = "100110")) then
+                    rgb_out <= "111111";
+                else
+                    rgb_out <= "000000";
+                end if;
+            elsif clubs = "10" then
+                if (address_x(9 downto 4) = "000010" and (address_y(9 downto 4) = "100011" or 
+                                                          address_y(9 downto 4) = "100100" or 
+                                                          address_y(9 downto 4) = "100101" or 
+                                                          address_y(9 downto 4) = "100110")) then
+                    rgb_out <= "111111";
+                elsif (address_x(9 downto 4) = "000011" and (address_y(9 downto 4) = "100011" or 
+                                                              address_y(9 downto 4) = "100101")) then
+                    rgb_out <= "111111";
+                elsif (address_x(9 downto 4) = "000100" and (address_y(9 downto 4) = "100011" or 
+                                                              address_y(9 downto 4) = "100100" or 
+                                                              address_y(9 downto 4) = "100101")) then
+                    rgb_out <= "111111";
+                else
+                    rgb_out <= "000000";
+                end if;
+            else
+                rgb_out <= "000000";
+            end if;
+        end if;
+        
+        rgb_c <= rgb_out;
+    end process;
+end synth;
