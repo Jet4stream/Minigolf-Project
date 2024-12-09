@@ -94,19 +94,19 @@ Begin
 			end if;
 
 			if ball_x_b = 0 and direction_state = LEFT_DIRECTION then
-				speed <= 0;
-			end if
+				speed <= "00000";
+			end if;
 
 			if ball_y_b = 0 and direction_state = UP_DIRECTION then
-				speed <= 0;
-			end if
+				speed <= "00000";
+			end if;
 	
 			if ball_x_b > 639 then
-				ball_x_b <= 639;
+				ball_x_b <= "1001111111";
 			end if;
 
 			if ball_y_b > 479 then
-				ball_y_b <= 479;
+				ball_y_b <= "0111011111";
 			end if;
 		
 			if input_counter = 0 then
