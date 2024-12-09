@@ -83,6 +83,12 @@ Begin
 					curr_state <= "01";
 				end if;
 			end if;
+
+			if unsigned(nunchuck_data(47 DOWNTO 40)) /= 255 and curr_state = "10" then
+				if nunchuck_data(1) = '0' then
+					curr_state <= "00";
+				end if;
+			end if;
 		
 			if input_counter = 0 then
 				if unsigned(nunchuck_data(47 DOWNTO 40)) = 255 then
@@ -199,7 +205,12 @@ Begin
 				end if;
 			end if;
 			
-	
+		if ball_x_b(9 downto 4) = 5 and ball_y_b(9 downto 4) = 5 then
+			if speed = 0 then
+				game_state <= "10";
+			end if;
+		end if;
+		
 		end if;
 
 		
