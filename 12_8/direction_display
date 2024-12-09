@@ -20,8 +20,8 @@ architecture synth of direction_display is
 	signal row: unsigned(5 downto 0);
 	signal column: unsigned(5 downto 0);
 begin 
-row <= address_x(9 downto 4);
-column <= address_y(9 downto 4);
+column <= address_x(9 downto 4);
+row <= address_y(9 downto 4);
 
 process (clk) begin
 	if rising_edge(clk) then 
