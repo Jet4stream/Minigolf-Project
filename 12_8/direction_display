@@ -1,0 +1,70 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity direction_display is
+    port(
+        clk         : in  std_logic;             
+        valid       : in  std_logic;                
+        address_x   : in  unsigned(9 downto 0);  
+        address_y   : in  unsigned(9 downto 0);
+		ball_x : in unsigned(9 downto 0);
+		ball_y : in unsigned(9 downto 0);
+		direction : in std_logic_vector(1 downto 0);
+		rgb_d : out unsigned(5 downto 0)
+	);
+end direction_display;
+
+architecture synth of direction_display is
+    signal rgb_out: unsigned(5 downto 0);
+	signal row: unsigned(5 downto 0);
+	signal column: unsigned(5 downto 0);
+begin 
+row <= address_x(9 downto 4);
+column <= address_y(9 downto 4);
+
+process (clk) begin
+	if rising_edge(clk) then 
+		if valid = '0' then
+			rgb_out <= "000000";
+		elsif direction = "00" then --left
+			if column = ball_y(9 downto 4) then
+				if row >= (ball_x(9 downto 4) - 5) then
+					if row < ball_x(9 downto 4) then
+						rgb_out <= "111111";
+					else 
+						rgb_out <= "000000";
+					end if;
+				end if;
+			end if;
+        elsif direction = "01" then --up
+			if row = ball_x(9 downto 4) then
+				if column >= (ball_y(9 downto 4) - 5) then
+					if column < ball_y(9 downto 4) then 
+						rgb_out <= "111111";
+					end if;
+				end if;
+			end if;
+		elsif direction = "10" then --right
+			if column = ball_y(9 downto 4) then
+				if row <= (ball_x(9 downto 4) + 5) then
+					if row > ball_x(9 downto 4) then
+						rgb_out <= "111111";
+					end if;
+				end if;
+			end if;
+		elsif direction = "11" then --down
+			if row = ball_x(9 downto 4) then
+				if column <= (ball_y(9 downto 4) + 5) then
+					if column > ball_y(9 downto 4) then 
+						rgb_out <= "111111";
+					end if;
+				end if;
+			end if;
+		end if;
+	end if;
+end process;
+
+	rgb_d <= rgb_out;
+
+end synth;
