@@ -1,4 +1,4 @@
-LIBRARY ieee;
+aLIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_unsigned.all;
 USE ieee.numeric_std.ALL;
@@ -87,7 +87,26 @@ Begin
 			if unsigned(nunchuck_data(47 DOWNTO 40)) /= 255 and curr_state = "10" then
 				if nunchuck_data(1) = '0' then
 					curr_state <= "00";
+					speed <= "0000";
+					ball_x_b <= "0111110000";
+					ball_y_b <= "0101110000";
 				end if;
+			end if;
+
+			if ball_x_b = 0 and direction_state = LEFT_DIRECTION then
+				speed <= 0;
+			end if
+
+			if ball_y_b = 0 and direction_state = UP_DIRECTION then
+				speed <= 0;
+			end if
+	
+			if ball_x_b > 639 then
+				ball_x_b <= 639;
+			end if;
+
+			if ball_y_b > 479 then
+				ball_y_b <= 479;
 			end if;
 		
 			if input_counter = 0 then
