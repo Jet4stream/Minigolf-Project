@@ -205,9 +205,11 @@ Begin
 				end if;
 			end if;
 			
-		if ball_x_b(9 downto 4) = 5 and ball_y_b(9 downto 4) = 5 then
-			if speed = 0 then
-				game_state <= "10";
+		if ball_x_b(9 downto 4) = 5 OR ball_x_b(9 downto 4) = 4 then
+			if ball_y_b(9 downto 4) = 5 OR ball_y_b(9 downto 4) = 4 then
+				if speed = 0 then
+					game_state <= "10";
+				end if;
 			end if;
 		end if;
 		
