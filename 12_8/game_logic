@@ -94,31 +94,31 @@ Begin
 				if unsigned(nunchuck_data(47 DOWNTO 40)) = 255 then
 					case direction_state is 
 						when LEFT_DIRECTION =>
-							direction_state <= UP_DIRECTION;
-							input_counter <= 6_000_000;
-						when UP_DIRECTION => 
-							direction_state <= RIGHT_DIRECTION;
-							input_counter <= 6_000_000;
-						when RIGHT_DIRECTION =>
 							direction_state <= DOWN_DIRECTION;
 							input_counter <= 6_000_000;
-						when DOWN_DIRECTION =>
+						when UP_DIRECTION => 
 							direction_state <= LEFT_DIRECTION;
+							input_counter <= 6_000_000;
+						when RIGHT_DIRECTION =>
+							direction_state <= UP_DIRECTION;
+							input_counter <= 6_000_000;
+						when DOWN_DIRECTION =>
+							direction_state <= RIGHT_DIRECTION;
 							input_counter <= 6_000_000;
 					end case;
 				elsif unsigned(nunchuck_data(47 DOWNTO 40)) < 50 then
 					case direction_state is 
 						when LEFT_DIRECTION =>
-							direction_state <= DOWN_DIRECTION;
-							input_counter <= 6_000_000;
-						when UP_DIRECTION => 
-							direction_state <= LEFT_DIRECTION;
-							input_counter <= 6_000_000;
-						when RIGHT_DIRECTION =>
 							direction_state <= UP_DIRECTION;
 							input_counter <= 6_000_000;
-						when DOWN_DIRECTION =>
+						when UP_DIRECTION => 
 							direction_state <= RIGHT_DIRECTION;
+							input_counter <= 6_000_000;
+						when RIGHT_DIRECTION =>
+							direction_state <= DOWN_DIRECTION;
+							input_counter <= 6_000_000;
+						when DOWN_DIRECTION =>
+							direction_state <= LEFT_DIRECTION;
 							input_counter <= 6_000_000;
 					end case;
 				elsif unsigned(nunchuck_data(39 DOWNTO 32)) = 255 then
