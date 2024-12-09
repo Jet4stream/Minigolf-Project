@@ -28,38 +28,100 @@ process (clk) begin
 		if valid = '0' then
 			rgb_out <= "000000";
 		elsif direction = "00" then --left
-			if column = ball_y(9 downto 4) then
-				if row >= (ball_x(9 downto 4) - 5) then
-					if row < ball_x(9 downto 4) then
-						rgb_out <= "111111";
-					else 
-						rgb_out <= "000000";
-					end if;
+			if (row = ball_y(9 downto 4) - 2) then
+				if (column = ball_x(9 downto 4) - 3) then
+					rgb_out <= "111111";
 				end if;
+			elsif (row = ball_y(9 downto 4) - 1) then
+				if (column = ball_x(9 downto 4) - 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (row = ball_y(9 downto 4)) then
+				if (column <= ball_x(9 downto 4) - 1) and (column >= ball_x(9 downto 4) - 5) then 
+					rgb_out <= "111111";
+				end if;
+			elsif (row = ball_y(9 downto 4) + 1) then
+				if (column = ball_x(9 downto 4) - 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (row = ball_y(9 downto 4) + 2) then
+				if (column = ball_x(9 downto 4) - 3) then
+					rgb_out <= "111111";
+				end if;
+			else 
+				rgb_out <= "000000";
 			end if;
-        elsif direction = "01" then --up
-			if row = ball_x(9 downto 4) then
-				if column >= (ball_y(9 downto 4) - 5) then
-					if column < ball_y(9 downto 4) then 
-						rgb_out <= "111111";
-					end if;
+        	elsif direction = "01" then --up	
+			if (column = ball_x(9 downto 4) - 2) then
+				if (row = ball_y(9 downto 4) - 3) then
+					rgb_out <= "111111";
 				end if;
+			elsif (column = ball_x(9 downto 4) - 1) then
+				if (row = ball_y(9 downto 4) - 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (column = ball_x(9 downto 4)) then
+				if (row <= ball_y(9 downto 4) - 1) and (row >= ball_y(9 downto 4) - 5) then 
+					rgb_out <= "111111";
+				end if;
+			elsif (column = ball_x(9 downto 4) + 1) then
+				if (row = ball_y(9 downto 4) - 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (column = ball_x(9 downto 4) + 2) then
+				if (row = ball_y(9 downto 4) - 3) then
+					rgb_out <= "111111";
+				end if;
+			else 
+				rgb_out <= "000000";
 			end if;
 		elsif direction = "10" then --right
-			if column = ball_y(9 downto 4) then
-				if row <= (ball_x(9 downto 4) + 5) then
-					if row > ball_x(9 downto 4) then
-						rgb_out <= "111111";
-					end if;
+			if (row = ball_y(9 downto 4) - 2) then
+				if (column = ball_x(9 downto 4) + 3) then
+					rgb_out <= "111111";
 				end if;
+			elsif (row = ball_y(9 downto 4) - 1) then
+				if (column = ball_x(9 downto 4) + 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (row = ball_y(9 downto 4)) then
+				if (column >= ball_x(9 downto 4) + 1) and (column <= ball_x(9 downto 4) + 5) then 
+					rgb_out <= "111111";
+				end if;
+			elsif (row = ball_y(9 downto 4) + 1) then
+				if (column = ball_x(9 downto 4) + 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (row = ball_y(9 downto 4) + 2) then
+				if (column = ball_x(9 downto 4) + 3) then
+					rgb_out <= "111111";
+				end if;
+			else 
+				rgb_out <= "000000";
 			end if;
 		elsif direction = "11" then --down
-			if row = ball_x(9 downto 4) then
-				if column <= (ball_y(9 downto 4) + 5) then
-					if column > ball_y(9 downto 4) then 
-						rgb_out <= "111111";
-					end if;
+			if (column = ball_x(9 downto 4) - 2) then
+				if (row = ball_y(9 downto 4) + 3) then
+					rgb_out <= "111111";
 				end if;
+			elsif (column = ball_x(9 downto 4) - 1) then
+				if (row = ball_y(9 downto 4) + 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (column = ball_x(9 downto 4)) then
+				if (row >= ball_y(9 downto 4) + 1) and (row <= ball_y(9 downto 4) + 5) then 
+					rgb_out <= "111111";
+				end if;
+			elsif (column = ball_x(9 downto 4) + 1) then
+				if (row = ball_y(9 downto 4) + 4) then
+					rgb_out <= "111111";
+				end if;
+			elsif (column = ball_x(9 downto 4) + 2) then
+				if (row = ball_y(9 downto 4) + 3) then
+					rgb_out <= "111111";
+				end if;
+			else 
+				rgb_out <= "000000";
 			end if;
 		end if;
 	end if;
